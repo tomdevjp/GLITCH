@@ -74,6 +74,45 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
+function parseGradient(gradientStr: string): { angle: number; startColor: string; endColor: string } {
+  const defaultVal = {
+    angle: 135,
+    startColor: '#10b981',
+    endColor: '#09090b'
+  };
+  
+  if (!gradientStr || !gradientStr.includes('gradient')) {
+    return defaultVal;
+  }
+  
+  try {
+    const angleMatch = gradientStr.match(/(\d+)deg/);
+    let angle = angleMatch ? parseInt(angleMatch[1]) : 135;
+    
+    if (gradientStr.includes('to right')) angle = 90;
+    if (gradientStr.includes('to bottom')) angle = 180;
+    if (gradientStr.includes('to left')) angle = 270;
+    if (gradientStr.includes('to top')) angle = 0;
+    
+    const hexMatch = gradientStr.match(/#[0-9a-fA-F]{3,6}/g);
+    if (hexMatch && hexMatch.length >= 2) {
+      return {
+        angle,
+        startColor: hexMatch[0],
+        endColor: hexMatch[1]
+      };
+    }
+    
+    return {
+      angle,
+      startColor: defaultVal.startColor,
+      endColor: defaultVal.endColor
+    };
+  } catch (e) {
+    return defaultVal;
+  }
+}
+
 export function DesignEditor() {
   const { formConfig, updateTheme, plan, savedDesigns, saveCurrentDesign, loadDesign, deleteDesign } = useAppStore();
   const theme = formConfig.theme;
@@ -220,13 +259,62 @@ export function DesignEditor() {
         )}
 
         {theme.background.type === 'gradient' && (
-          <div className="space-y-3">
-            <Label className="text-xs text-zinc-400">CSS Gradient</Label>
-            <Input 
-              value={theme.background.gradient} 
-              onChange={(e) => handleBgChange('gradient', e.target.value)}
-              className="bg-zinc-900 border-zinc-800 font-mono text-xs"
-            />
+          <div className="space-y-4 bg-zinc-900/10 p-3 rounded-lg border border-zinc-800/40">
+            <div className="space-y-1">
+              <Label className="text-xs font-semibold text-zinc-300">CSS Gradient Editor</Label>
+              <p className="text-[10px] text-zinc-500">直感的なスライダー操作で美しいグラデーションを作成します。</p>
+            </div>
+            
+            <div className="space-y-3 pt-1">
+              {(() => {
+                const { angle, startColor, endColor } = parseGradient(theme.background.gradient);
+                
+                const updateGrad = (updates: { angle?: number; startColor?: string; endColor?: string }) => {
+                  const a = updates.angle !== undefined ? updates.angle : angle;
+                  const sc = updates.startColor !== undefined ? updates.startColor : startColor;
+                  const ec = updates.endColor !== undefined ? updates.endColor : endColor;
+                  handleBgChange('gradient', `linear-gradient(${a}deg, ${sc} 0%, ${ec} 100%)`);
+                };
+
+                return (
+                  <>
+                    <ColorPicker 
+                      label="Start Color (開始色)" 
+                      value={startColor} 
+                      onChange={(v) => updateGrad({ startColor: v })} 
+                    />
+                    <ColorPicker 
+                      label="End Color (終了色)" 
+                      value={endColor} 
+                      onChange={(v) => updateGrad({ endColor: v })} 
+                    />
+                    
+                    <div className="space-y-2 pt-2">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-zinc-400">Gradient Angle (角度)</span>
+                        <span className="font-mono text-zinc-500">{angle}°</span>
+                      </div>
+                      <Slider 
+                        value={[angle]} 
+                        min={0} max={360} step={5}
+                        onValueChange={(val: any) => updateGrad({ angle: Array.isArray(val) ? val[0] : val })}
+                      />
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+            
+            <div className="h-px bg-zinc-800/50 my-2" />
+            
+            <div className="space-y-1.5">
+              <Label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Raw CSS Code (生CSS入力)</Label>
+              <Input 
+                value={theme.background.gradient} 
+                onChange={(e) => handleBgChange('gradient', e.target.value)}
+                className="bg-zinc-950 border-zinc-800 font-mono text-[10px] h-8 text-zinc-400"
+              />
+            </div>
           </div>
         )}
         
