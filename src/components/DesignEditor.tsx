@@ -528,47 +528,77 @@ function ColorPicker({ label, value, onChange }: { label: string, value: string,
        
        {/* 展開されるデザインツール仕様 HSLカラー調整スライダー */}
        <AnimatePresence>
-         {isOpen && (
-           <motion.div 
-             initial={{ opacity: 0, height: 0 }}
-             animate={{ opacity: 1, height: 'auto' }}
-             exit={{ opacity: 0, height: 0 }}
-                 <input 
-                   type="range" 
-                   min="0" 
-                   max="100" 
-                   value={hsl.s} 
-                   onChange={(e) => handleHslChange(hsl.h, parseInt(e.target.value), hsl.l)}
-                   className="w-full h-2 rounded-lg appearance-none cursor-pointer"
-                   style={{
-                     background: `linear-gradient(to right, ${hslToHex(hsl.h, 0, 50)} 0%, ${hslToHex(hsl.h, 100, 50)} 100%)`
-                   }}
-                 />
-               </div>
-             </div>
+          {isOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden pt-3 space-y-3 border-t border-zinc-800/50 mt-1 shadow-inner bg-zinc-950/40 p-3 rounded-lg border border-zinc-800/60"
+            >
+              {/* 1. H (Hue/色相) スライダー - レインボーカラーの背景グラデーションレール */}
+              <div className="space-y-1">
+                <div className="flex justify-between text-[9px] text-zinc-400">
+                  <span>Hue (色相)</span>
+                  <span>{hsl.h}°</span>
+                </div>
+                <div className="relative flex items-center">
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="360" 
+                    value={hsl.h} 
+                    onChange={(e) => handleHslChange(parseInt(e.target.value), hsl.s, hsl.l)}
+                    className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                    style={{
+                      background: 'linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)'
+                    }}
+                  />
+                </div>
+              </div>
 
-             {/* 3. L (Lightness/明度) スライダー - 黒〜白グラデーションレール */}
-             <div className="space-y-1">
-               <div className="flex justify-between text-[9px] text-zinc-400">
-                 <span>Lightness (明度)</span>
-                 <span>{hsl.l}%</span>
-               </div>
-               <div className="relative flex items-center">
-                 <input 
-                   type="range" 
-                   min="0" 
-                   max="100" 
-                   value={hsl.l} 
-                   onChange={(e) => handleHslChange(hsl.h, hsl.s, parseInt(e.target.value))}
-                   className="w-full h-2 rounded-lg appearance-none cursor-pointer"
-                   style={{
-                     background: `linear-gradient(to right, #000000 0%, ${hslToHex(hsl.h, hsl.s, 50)} 50%, #ffffff 100%)`
-                   }}
-                 />
-               </div>
-             </div>
-           </motion.div>
-         )}
+              {/* 2. S (Saturation/彩度) スライダー - 鮮やかさグラデーションレール */}
+              <div className="space-y-1">
+                <div className="flex justify-between text-[9px] text-zinc-400">
+                  <span>Saturation (彩度)</span>
+                  <span>{hsl.s}%</span>
+                </div>
+                <div className="relative flex items-center">
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value={hsl.s} 
+                    onChange={(e) => handleHslChange(hsl.h, parseInt(e.target.value), hsl.l)}
+                    className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, ${hslToHex(hsl.h, 0, 50)} 0%, ${hslToHex(hsl.h, 100, 50)} 100%)`
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* 3. L (Lightness/明度) スライダー - 黒〜白グラデーションレール */}
+              <div className="space-y-1">
+                <div className="flex justify-between text-[9px] text-zinc-400">
+                  <span>Lightness (明度)</span>
+                  <span>{hsl.l}%</span>
+                </div>
+                <div className="relative flex items-center">
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value={hsl.l} 
+                    onChange={(e) => handleHslChange(hsl.h, hsl.s, parseInt(e.target.value))}
+                    className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, #000000 0%, ${hslToHex(hsl.h, hsl.s, 50)} 50%, #ffffff 100%)`
+                    }}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
        </AnimatePresence>
      </div>
   );
