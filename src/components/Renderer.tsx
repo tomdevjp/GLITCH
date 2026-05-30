@@ -176,17 +176,27 @@ export function Renderer({
               <img src={hero.logoUrl} alt="Logo" className="mb-6 max-h-24 object-contain shadow-2xl" />
             )}
             
-            {/* ヒーロータイトル (プレビューデバイス対応モバイルレスポンシブ：スマホプレビューでも即座に上品なtext-2xlに縮小されます) */}
+            {/* ヒーロータイトル (プレビューデバイス対応モバイルレスポンシブ ＆ 太さ・スタイル適用) */}
             <h1 
               className={titleClass}
-              style={{ fontFamily: 'var(--font-family-heading)' }}
+              style={{ 
+                fontFamily: 'var(--font-family-heading)',
+                fontWeight: theme.typography.headingWeight || 'bold',
+                fontStyle: theme.typography.headingItalic ? 'italic' : 'normal',
+                textTransform: theme.typography.headingUppercase ? 'uppercase' : 'none'
+              }}
             >
               {hero.title}
             </h1>
             
-            {/* ヒーロー説明文 (プレビューデバイス対応モバイルレスポンシブ：スマホプレビューでも即座にすっきりしたtext-smに縮小されます) */}
+            {/* ヒーロー説明文 (プレビューデバイス対応モバイルレスポンシブ ＆ 太さ適用) */}
             {hero.description && (
-              <p className={descClass}>
+              <p 
+                className={descClass}
+                style={{
+                  fontWeight: theme.typography.bodyWeight || 'normal'
+                }}
+              >
                 {hero.description}
               </p>
             )}
@@ -236,8 +246,16 @@ export function Renderer({
                   </svg>
                 </div>
                 
-                {/* サンクスメッセージタイトル (モバイルレスポンシブ：スマホではtext-xl、PCでtext-2xl) */}
-                <h2 className="text-xl md:text-2xl font-bold tracking-wide" style={{ fontFamily: 'var(--font-family-heading)' }}>
+                {/* サンクスメッセージタイトル (モバイルレスポンシブ ＆ スタイル適用) */}
+                <h2 
+                  className="text-xl md:text-2xl tracking-wide" 
+                  style={{ 
+                    fontFamily: 'var(--font-family-heading)',
+                    fontWeight: theme.typography.headingWeight || 'bold',
+                    fontStyle: theme.typography.headingItalic ? 'italic' : 'normal',
+                    textTransform: theme.typography.headingUppercase ? 'uppercase' : 'none'
+                  }}
+                >
                   送信が完了しました
                 </h2>
                 

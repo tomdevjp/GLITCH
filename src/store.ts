@@ -19,6 +19,10 @@ const defaultTheme: ThemeTokens = {
   typography: {
     fontFamily: '"Inter", sans-serif',
     headingFontFamily: '"Space Grotesk", sans-serif',
+    headingWeight: 'bold',
+    headingItalic: false,
+    headingUppercase: false,
+    bodyWeight: 'normal',
   },
   background: {
     type: 'gradient',

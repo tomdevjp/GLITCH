@@ -16,6 +16,10 @@ export type ThemeColors = {
 export type ThemeTypography = {
   fontFamily: string;
   headingFontFamily: string;
+  headingWeight?: 'normal' | 'medium' | 'semibold' | 'bold' | 'black';
+  headingItalic?: boolean;
+  headingUppercase?: boolean;
+  bodyWeight?: 'light' | 'normal' | 'medium' | 'bold';
 };
 
 export type ThemeBackground = {
