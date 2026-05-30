@@ -14,15 +14,30 @@ import { useAppStore } from '../store';
 export function Renderer({ 
   config, 
   isPreview = false,
-  onSubmit 
+  onSubmit,
+  device = 'desktop'
 }: { 
   config: FormConfig; 
   isPreview?: boolean;
   onSubmit?: (answers: Record<string, any>) => Promise<void>;
+  device?: 'desktop' | 'tablet' | 'mobile';
 }) {
   const { plan } = useAppStore();
   const styles = useThemeStyles(config.theme);
   const { theme, hero, questions, settings } = config;
+
+  // プレビュー表示時に、選択されているデバイス（モバイル/タブレット/デスクトップ）に応じてフォントサイズを流動的に変化させるロジック
+  const titleClass = device === 'mobile' 
+    ? 'text-2xl font-bold tracking-tight mb-4 text-balance drop-shadow-lg' 
+    : device === 'tablet'
+    ? 'text-4xl font-bold tracking-tight mb-4 text-balance drop-shadow-lg'
+    : 'text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 text-balance drop-shadow-lg';
+
+  const descClass = device === 'mobile'
+    ? 'text-sm text-[var(--color-text-secondary)] max-w-2xl text-balance drop-shadow-md'
+    : device === 'tablet'
+    ? 'text-base text-[var(--color-text-secondary)] max-w-2xl text-balance drop-shadow-md'
+    : 'text-sm md:text-lg lg:text-xl text-[var(--color-text-secondary)] max-w-2xl text-balance drop-shadow-md';
 
   // フォームの入力状態管理用のステート
   const [answers, setAnswers] = React.useState<Record<string, any>>({});
@@ -161,17 +176,17 @@ export function Renderer({
               <img src={hero.logoUrl} alt="Logo" className="mb-6 max-h-24 object-contain shadow-2xl" />
             )}
             
-            {/* ヒーロータイトル (モバイルレスポンシブな特大文字：スマホでは上品なtext-3xl、PCで迫力のあるmd:text-5xl/lg:text-6xl) */}
+            {/* ヒーロータイトル (プレビューデバイス対応モバイルレスポンシブ：スマホプレビューでも即座に上品なtext-2xlに縮小されます) */}
             <h1 
-              className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 text-balance drop-shadow-lg"
+              className={titleClass}
               style={{ fontFamily: 'var(--font-family-heading)' }}
             >
               {hero.title}
             </h1>
             
-            {/* ヒーロー説明文 (モバイルレスポンシブなサイズ：スマホではすっきりしたtext-sm、PCでmd:text-lg/lg:text-xl) */}
+            {/* ヒーロー説明文 (プレビューデバイス対応モバイルレスポンシブ：スマホプレビューでも即座にすっきりしたtext-smに縮小されます) */}
             {hero.description && (
-              <p className="text-sm md:text-lg lg:text-xl text-[var(--color-text-secondary)] max-w-2xl text-balance drop-shadow-md">
+              <p className={descClass}>
                 {hero.description}
               </p>
             )}

@@ -56,7 +56,7 @@ export default function App() {
         {/* Renderer Wrapper */}
         <div className="flex-1 overflow-y-auto pt-14 flex justify-center bg-zinc-950/50">
           <div className={`transition-all duration-300 ease-in-out w-full h-full relative ${getDeviceWidth()} ${device !== 'desktop' ? 'my-8 border border-zinc-800/60 rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-white/5' : ''}`}>
-            <Renderer config={formConfig} isPreview={true} />
+            <Renderer config={formConfig} isPreview={true} device={device} />
           </div>
         </div>
       </div>
