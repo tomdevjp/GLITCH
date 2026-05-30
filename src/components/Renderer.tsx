@@ -104,21 +104,24 @@ export function Renderer({
       */}
       <div className="absolute inset-0 z-[-1] pointer-events-none">
         {/* レイヤー1: ソリッド単色背景 */}
-        <div className="absolute inset-0 bg-[var(--bg-base-color)]" />
+        <div 
+          className="absolute inset-0" 
+          style={{ backgroundColor: theme.background.baseColor }}
+        />
         
         {/* レイヤー2: CSSグラデーション背景 */}
-        {theme.background.type === 'gradient' && (
+        {theme.background.type === 'gradient' && theme.background.gradient && (
           <div 
             className="absolute inset-0"
-            style={{ background: 'var(--bg-gradient)' }}
+            style={{ background: theme.background.gradient }}
           />
         )}
         
         {/* レイヤー3: 画像 / GIF 背景 */}
-        {theme.background.type === 'image' && (
+        {theme.background.type === 'image' && theme.background.imageUrl && (
           <div 
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: 'var(--bg-image)' }}
+            style={{ backgroundImage: `url(${theme.background.imageUrl})` }}
           />
         )}
 
@@ -138,10 +141,10 @@ export function Renderer({
         <div 
           className="absolute inset-0"
           style={{ 
-            backgroundColor: 'var(--bg-overlay-color)',
-            opacity: 'var(--bg-overlay-opacity)',
-            backdropFilter: `blur(var(--bg-blur))`,
-            WebkitBackdropFilter: `blur(var(--bg-blur))`
+            backgroundColor: theme.background.overlayColor,
+            opacity: theme.background.overlayOpacity,
+            backdropFilter: `blur(${theme.background.blur}px)`,
+            WebkitBackdropFilter: `blur(${theme.background.blur}px)`
           }}
         />
 
