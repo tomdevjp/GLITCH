@@ -288,7 +288,7 @@ export function DesignEditor() {
           -------------------------------------------------------------------------- */}
       <section className="space-y-4">
         <h3 className="text-sm font-medium text-emerald-400 uppercase tracking-widest">Brand Colors</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-3.5">
           <ColorPicker label="Primary (ボタン背景など)" value={theme.colors.primary} onChange={(v) => handleColorChange('primary', v)} />
           <ColorPicker label="Accent (強調箇所など)" value={theme.colors.accent} onChange={(v) => handleColorChange('accent', v)} />
           <ColorPicker label="Surface (フォームカード背景)" value={theme.colors.surface} onChange={(v) => handleColorChange('surface', v)} />
@@ -484,33 +484,46 @@ function ColorPicker({ label, value, onChange }: { label: string, value: string,
   };
   
   return (
-     <div className="space-y-1.5 flex flex-col border border-zinc-800/40 p-2 rounded bg-zinc-900/10">
-       <span className="text-[10px] text-zinc-500 uppercase tracking-wider">{label}</span>
-       <div className="flex gap-2 items-center">
-         {/* 色サンプル ＆ ブラウザカラーピッカー */}
-         <div className="relative w-8 h-8 rounded shrink-0 overflow-hidden border border-zinc-700 select-none cursor-pointer group">
-            <input 
-               type="color" 
-               value={value} 
-               onChange={(e) => onChange(e.target.value)}
-               className="absolute -inset-2 w-12 h-12 cursor-pointer"
-            />
+     <div className="flex flex-col gap-2.5 p-3 rounded-lg bg-zinc-900/20 border border-zinc-800/40 hover:border-zinc-800 transition-all">
+       {/* 上部メインエリア：カラーラベル、パレット、入力、スライダー切り替えを一列に */}
+       <div className="flex items-center justify-between gap-3">
+         {/* 左側：色プレビュー（丸） ＆ カラーの名称 */}
+         <div className="flex items-center gap-3 flex-1 min-w-0">
+           {/* 円形のプレビューカラー。クリックでブラウザのカラーピッカーが起動します */}
+           <div className="relative w-8 h-8 rounded-full shrink-0 overflow-hidden border border-zinc-700 select-none cursor-pointer shadow-lg hover:scale-105 transition-transform">
+              <input 
+                 type="color" 
+                 value={value} 
+                 onChange={(e) => onChange(e.target.value)}
+                 className="absolute -inset-2 w-12 h-12 cursor-pointer"
+              />
+           </div>
+           <div className="flex flex-col min-w-0">
+             <span className="text-xs font-semibold text-zinc-200 truncate">{label}</span>
+             <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider">{value}</span>
+           </div>
          </div>
-         {/* HEXカラーコードの手動テキスト入力 */}
-         <Input 
-           value={value}
-           onChange={(e) => onChange(e.target.value)}
-           className="h-8 text-xs bg-zinc-900 border-zinc-800 px-2 flex-1"
-         />
-         {/* スライダー表示切り替えトグルボタン (Figmaの調整パネル風) */}
-         <Button 
-           size="sm" 
-           variant="ghost" 
-           className={`h-8 px-2 text-[10px] transition-colors ${isOpen ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-400 hover:text-zinc-200'}`}
-           onClick={() => setIsOpen(!isOpen)}
-         >
-           Sliders
-         </Button>
+         
+         {/* 右側：HEXコード入力欄 ＆ Slidersトグルボタン */}
+         <div className="flex items-center gap-2">
+           <Input 
+             value={value}
+             onChange={(e) => onChange(e.target.value)}
+             className="h-8 w-20 text-[10px] font-mono bg-zinc-950 border-zinc-800 px-2 text-center text-zinc-300 focus-visible:ring-1 focus-visible:ring-emerald-500"
+           />
+           <Button 
+             size="sm" 
+             variant="ghost" 
+             className={`h-8 px-2.5 text-[10px] font-bold tracking-wide rounded transition-all ${
+               isOpen 
+                 ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.12)]' 
+                 : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'
+             }`}
+             onClick={() => setIsOpen(!isOpen)}
+           >
+             Sliders
+           </Button>
+         </div>
        </div>
        
        {/* 展開されるデザインツール仕様 HSLカラー調整スライダー */}
@@ -520,36 +533,6 @@ function ColorPicker({ label, value, onChange }: { label: string, value: string,
              initial={{ opacity: 0, height: 0 }}
              animate={{ opacity: 1, height: 'auto' }}
              exit={{ opacity: 0, height: 0 }}
-             className="overflow-hidden pt-2 space-y-3 border-t border-zinc-800/50 mt-1"
-           >
-             {/* 1. H (Hue/色相) スライダー - レインボーカラーの背景グラデーションレール */}
-             <div className="space-y-1">
-               <div className="flex justify-between text-[9px] text-zinc-400">
-                 <span>Hue (色相)</span>
-                 <span>{hsl.h}°</span>
-               </div>
-               <div className="relative flex items-center">
-                 <input 
-                   type="range" 
-                   min="0" 
-                   max="360" 
-                   value={hsl.h} 
-                   onChange={(e) => handleHslChange(parseInt(e.target.value), hsl.s, hsl.l)}
-                   className="w-full h-2 rounded-lg appearance-none cursor-pointer"
-                   style={{
-                     background: 'linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)'
-                   }}
-                 />
-               </div>
-             </div>
-
-             {/* 2. S (Saturation/彩度) スライダー - 鮮やかさグラデーションレール */}
-             <div className="space-y-1">
-               <div className="flex justify-between text-[9px] text-zinc-400">
-                 <span>Saturation (彩度)</span>
-                 <span>{hsl.s}%</span>
-               </div>
-               <div className="relative flex items-center">
                  <input 
                    type="range" 
                    min="0" 

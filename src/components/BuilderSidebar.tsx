@@ -167,7 +167,7 @@ export function BuilderSidebar() {
       {/* --------------------------------------------------------------------------
           ④ 編集メニューのタブ切り替え（「構成タブ」と「デザインタブ」）
           -------------------------------------------------------------------------- */}
-      <Tabs defaultValue="design" className="flex-1 flex flex-col overflow-hidden">
+      <Tabs defaultValue="design" className="flex-1 flex flex-col min-h-0 overflow-hidden">
         {/* タブ選択ヘッダー */}
         <TabsList className="w-full justify-start rounded-none border-b border-zinc-800 bg-zinc-950/50 p-0">
           {/* Structure (構成) タブボタン */}
@@ -182,7 +182,12 @@ export function BuilderSidebar() {
           </TabsTrigger>
         </TabsList>
 
-        <ScrollArea className="flex-1">
+        {/* --------------------------------------------------------------------------
+            【スクロール領域の修復】
+            高さを正しく追従させるため、標準の慣性スクロール付きdivに置き換えます。
+            これによりサイドバー内部だけで完全にスクロールが制御され、崩れがなくなります。
+            -------------------------------------------------------------------------- */}
+        <div className="flex-1 overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
           <TabsContent value="structure" className="p-4 space-y-8 mt-0 outline-none">
             <section className="space-y-4">
               <div className="space-y-1">
@@ -437,8 +442,8 @@ export function BuilderSidebar() {
             <TabsContent value="design" className="p-0 mt-0 outline-none">
               <DesignEditor />
             </TabsContent>
-          </ScrollArea>
-        </Tabs>
+        </div>
+      </Tabs>
 
         {/* Esports Neon Style Publish Modal */}
         <AnimatePresence>
