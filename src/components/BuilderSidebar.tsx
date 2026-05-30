@@ -109,23 +109,37 @@ export function BuilderSidebar() {
   };
 
   return (
+    /* ==========================================================================
+       【UI全体のコンテナ】
+       サイドバーの外枠（漆黒の背景、極薄ボーダー、Space Groteskフォントなど）です。
+       ========================================================================== */
     <div className="w-full h-full bg-zinc-950 text-zinc-100 border-r border-zinc-800 flex flex-col font-sans">
+      
+      {/* --------------------------------------------------------------------------
+          ① サイドバーヘッダー（ロゴ ＆ 公開Publishボタン）
+          -------------------------------------------------------------------------- */}
       <div className="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
+        {/* 左側：GLITCH テキストロゴ */}
         <div className="flex items-center gap-2">
            <h2 className="font-black text-xl tracking-[0.12em] text-zinc-100" style={{ fontFamily: '"Space Grotesk", sans-serif' }}>
              GLI<span className="text-emerald-400">TCH</span>
            </h2>
+           {/* PROプランバッジ */}
            {plan === 'pro' && (
              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-zinc-950 ml-1 flex items-center gap-1">
                <Gem className="w-3 h-3" /> PRO
              </span>
            )}
         </div>
+        {/* 右側：Publish（公開用URL発行）ボタン */}
         <Button onClick={handlePublish} variant="outline" size="sm" className="bg-zinc-900 border-zinc-700 hover:bg-zinc-800 text-xs text-emerald-400 border-emerald-500/30 hover:border-emerald-500/60 transition-colors">
           Publish
         </Button>
       </div>
 
+      {/* --------------------------------------------------------------------------
+          ② プランアップグレード促進バナー（Free版の時に表示）
+          -------------------------------------------------------------------------- */}
       {plan === 'free' && (
         <div className="bg-gradient-to-r from-emerald-500/10 to-transparent p-3 border-b border-zinc-800 flex items-center justify-between">
            <div className="flex flex-col">
@@ -138,6 +152,9 @@ export function BuilderSidebar() {
         </div>
       )}
 
+      {/* --------------------------------------------------------------------------
+          ③ プランダウングレードバナー（Pro版のデモ解除用に表示）
+          -------------------------------------------------------------------------- */}
       {plan === 'pro' && (
          <div className="bg-gradient-to-r from-zinc-800/30 to-transparent p-3 border-b border-zinc-800 flex items-center justify-between cursor-pointer" onClick={() => setPlan('free')}>
            <div className="flex items-center gap-2">
@@ -147,12 +164,18 @@ export function BuilderSidebar() {
          </div>
       )}
 
+      {/* --------------------------------------------------------------------------
+          ④ 編集メニューのタブ切り替え（「構成タブ」と「デザインタブ」）
+          -------------------------------------------------------------------------- */}
       <Tabs defaultValue="design" className="flex-1 flex flex-col overflow-hidden">
+        {/* タブ選択ヘッダー */}
         <TabsList className="w-full justify-start rounded-none border-b border-zinc-800 bg-zinc-950/50 p-0">
+          {/* Structure (構成) タブボタン */}
           <TabsTrigger value="structure" className="data-[state=active]:bg-zinc-900/80 rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-500 py-3 px-4 flex items-center gap-2">
             <Layout className="w-4 h-4" />
             <span className="text-xs font-medium">Structure</span>
           </TabsTrigger>
+          {/* Design (デザイン) タブボタン */}
           <TabsTrigger value="design" className="data-[state=active]:bg-zinc-900/80 rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-500 py-3 px-4 flex items-center gap-2">
             <Palette className="w-4 h-4" />
             <span className="text-xs font-medium">Design</span>

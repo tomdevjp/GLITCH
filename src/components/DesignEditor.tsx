@@ -33,8 +33,16 @@ export function DesignEditor() {
   };
 
   return (
+    /* ==========================================================================
+       【デザインエディターパネル全体】
+       背景、配色、フォント、ガラス効果などを細かくカスタマイズするためのUI群です。
+       ========================================================================== */
     <div className="flex flex-col gap-8 p-4">
-      {/* Presets / Saved Designs */}
+      
+      {/* --------------------------------------------------------------------------
+          ① Saved Designs（デザインプリセットの保存と読み込み・削除）
+          - 作成した独自デザインに名前をつけてローカルに保存したり、呼び出したりできます。
+          -------------------------------------------------------------------------- */}
       <section className="space-y-4">
         <h3 className="text-sm font-medium text-emerald-400 uppercase tracking-widest flex items-center justify-between">
            Saved Designs
@@ -42,6 +50,7 @@ export function DesignEditor() {
         </h3>
         
         <div className="space-y-3">
+           {/* デザイン名入力 ＆ 保存ボタン */}
            <div className="flex gap-2">
              <Input 
                 placeholder="Design Name..." 
@@ -54,6 +63,7 @@ export function DesignEditor() {
              </Button>
            </div>
 
+           {/* 保存されたプリセット一覧カードのループ表示 */}
            <div className="space-y-2 mt-4">
               {savedDesigns.map(design => (
                  <div key={design.id} className="flex items-center justify-between bg-zinc-900/50 p-2 rounded border border-zinc-800 group transition-colors hover:bg-zinc-900">
@@ -63,6 +73,7 @@ export function DesignEditor() {
                           {new Date(design.updatedAt).toLocaleDateString()}
                        </span>
                     </div>
+                    {/* ホバー時に出現する「適用(Apply)」および「削除」ボタン */}
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                        <Button size="sm" variant="ghost" className="h-6 px-2 text-[10px] text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10" onClick={() => loadDesign(design.id)}>
                          Apply
@@ -74,15 +85,19 @@ export function DesignEditor() {
                  </div>
               ))}
            </div>
-        </div>
+         </div>
       </section>
 
       <div className="h-px bg-zinc-800" />
 
-      {/* Background Section */}
+      {/* --------------------------------------------------------------------------
+          ② Background Engine（背景デザインの選択・調整）
+          - 単色、グラデーション、背景画像(GIF)、さらにはビデオ背景の設定を統合的に制御します。
+          -------------------------------------------------------------------------- */}
       <section className="space-y-4">
         <h3 className="text-sm font-medium text-emerald-400 uppercase tracking-widest">Background Engine</h3>
         
+        {/* 背景タイプのプルダウン選択肢 */}
         <div className="space-y-3">
           <Label className="text-xs text-zinc-400">Background Type</Label>
           <Select 
@@ -201,26 +216,33 @@ export function DesignEditor() {
 
       <div className="h-px bg-zinc-800" />
 
-      {/* Colors Section */}
+      {/* --------------------------------------------------------------------------
+          ③ Brand Colors（カラーテーマの選択）
+          - 各フォームの背景、文字色、ボーダー、プレースホルダーなどのカラーパレットを定義します。
+          -------------------------------------------------------------------------- */}
       <section className="space-y-4">
         <h3 className="text-sm font-medium text-emerald-400 uppercase tracking-widest">Brand Colors</h3>
         <div className="grid grid-cols-2 gap-4">
-          <ColorPicker label="Primary" value={theme.colors.primary} onChange={(v) => handleColorChange('primary', v)} />
-          <ColorPicker label="Accent" value={theme.colors.accent} onChange={(v) => handleColorChange('accent', v)} />
-          <ColorPicker label="Surface" value={theme.colors.surface} onChange={(v) => handleColorChange('surface', v)} />
-          <ColorPicker label="Input Base" value={theme.colors.input} onChange={(v) => handleColorChange('input', v)} />
-          <ColorPicker label="Text (Primary)" value={theme.colors.textPrimary} onChange={(v) => handleColorChange('textPrimary', v)} />
-          <ColorPicker label="Text (Secondary)" value={theme.colors.textSecondary} onChange={(v) => handleColorChange('textSecondary', v)} />
-          <ColorPicker label="Placeholder" value={theme.colors.placeholder} onChange={(v) => handleColorChange('placeholder', v)} />
-          <ColorPicker label="Border" value={theme.colors.border} onChange={(v) => handleColorChange('border', v)} />
+          <ColorPicker label="Primary (ボタン背景など)" value={theme.colors.primary} onChange={(v) => handleColorChange('primary', v)} />
+          <ColorPicker label="Accent (強調箇所など)" value={theme.colors.accent} onChange={(v) => handleColorChange('accent', v)} />
+          <ColorPicker label="Surface (フォームカード背景)" value={theme.colors.surface} onChange={(v) => handleColorChange('surface', v)} />
+          <ColorPicker label="Input Base (入力枠背景)" value={theme.colors.input} onChange={(v) => handleColorChange('input', v)} />
+          <ColorPicker label="Text (Primary / 主な文字色)" value={theme.colors.textPrimary} onChange={(v) => handleColorChange('textPrimary', v)} />
+          <ColorPicker label="Text (Secondary / 補足文字色)" value={theme.colors.textSecondary} onChange={(v) => handleColorChange('textSecondary', v)} />
+          <ColorPicker label="Placeholder (薄いガイド文字)" value={theme.colors.placeholder} onChange={(v) => handleColorChange('placeholder', v)} />
+          <ColorPicker label="Border (枠線)" value={theme.colors.border} onChange={(v) => handleColorChange('border', v)} />
         </div>
       </section>
       
       <div className="h-px bg-zinc-800" />
 
-      {/* Typography */}
+      {/* --------------------------------------------------------------------------
+          ④ Typography（フォント設定）
+          - 見出しと本文のそれぞれに適用するフォントファミリーを選択します。
+          -------------------------------------------------------------------------- */}
       <section className="space-y-4">
         <h3 className="text-sm font-medium text-emerald-400 uppercase tracking-widest">Typography</h3>
+        {/* 見出しフォント */}
         <div className="space-y-3">
           <Label className="text-xs text-zinc-400">Heading Font</Label>
           <Select 
@@ -237,6 +259,7 @@ export function DesignEditor() {
             </SelectContent>
           </Select>
         </div>
+        {/* 本文・説明文・入力欄フォント */}
         <div className="space-y-3">
           <Label className="text-xs text-zinc-400">Body Font</Label>
           <Select 
@@ -257,15 +280,20 @@ export function DesignEditor() {
 
       <div className="h-px bg-zinc-800" />
 
-      {/* Effects Section */}
+      {/* --------------------------------------------------------------------------
+          ⑤ Effects & Style（ガラスエフェクト・デザインの質感）
+          - 半透明のガラス効果（Glassmorphism）、入力欄の枠線の形状、カードの角丸（Card Radius）を設定します。
+          -------------------------------------------------------------------------- */}
       <section className="space-y-4 pb-12">
         <h3 className="text-sm font-medium text-emerald-400 uppercase tracking-widest">Effects & Style</h3>
         
+        {/* ガラス効果（Glassmorphism）のON/OFF切り替え */}
         <div className="flex items-center justify-between">
            <Label className="text-sm text-zinc-300">Glassmorphism</Label>
            <Switch checked={theme.effects.glassmorphism} onCheckedChange={(v) => handleEffectsChange('glassmorphism', v)} />
         </div>
         
+        {/* 入力欄のスタイル設定（塗りつぶし / アウトライン / 下線のみ） */}
         <div className="space-y-3 mt-4">
           <Label className="text-xs text-zinc-400">Input Style</Label>
           <Select 
@@ -276,15 +304,16 @@ export function DesignEditor() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-zinc-900 border-zinc-800">
-              <SelectItem value="solid">Solid</SelectItem>
-              <SelectItem value="outline">Outline</SelectItem>
-              <SelectItem value="underlined">Underlined</SelectItem>
+              <SelectItem value="solid">Solid (塗りつぶし)</SelectItem>
+              <SelectItem value="outline">Outline (枠線のみ)</SelectItem>
+              <SelectItem value="underlined">Underlined (下線のみ)</SelectItem>
             </SelectContent>
           </Select>
         </div>
         
+        {/* フォームカードの角丸（Card Radius）設定（角張る / 小 / 中 / 大） */}
         <div className="space-y-3 mt-4">
-          <Label className="text-xs text-zinc-400">Card Radius</Label>
+          <Label className="text-xs text-zinc-400">Card Radius (角丸の強さ)</Label>
           <Select 
             value={theme.effects.cardRadius} 
             onValueChange={(val: any) => handleEffectsChange('cardRadius', val)}
@@ -293,10 +322,10 @@ export function DesignEditor() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-zinc-900 border-zinc-800">
-              <SelectItem value="0px">Sharp</SelectItem>
-              <SelectItem value="0.5rem">Small</SelectItem>
-              <SelectItem value="1rem">Medium</SelectItem>
-              <SelectItem value="1.5rem">Large</SelectItem>
+              <SelectItem value="0px">Sharp (角張る)</SelectItem>
+              <SelectItem value="0.5rem">Small (少し丸い)</SelectItem>
+              <SelectItem value="1rem">Medium (中間)</SelectItem>
+              <SelectItem value="1.5rem">Large (大きく丸い)</SelectItem>
             </SelectContent>
           </Select>
         </div>
