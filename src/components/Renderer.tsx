@@ -149,7 +149,7 @@ export function Renderer({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className={`w-full max-w-4xl px-6 flex flex-col justify-center ${
-              hero.height === 'screen' ? 'min-h-[100svh] py-24' : hero.height === 'large' ? 'min-h-[60svh] py-20' : 'py-16'
+              hero.height === 'screen' ? 'min-h-[100svh] py-12' : hero.height === 'large' ? 'min-h-[60svh] py-10' : 'py-8'
             }`}
             style={{
               alignItems: hero.alignment === 'center' ? 'center' : hero.alignment === 'right' ? 'flex-end' : 'flex-start',
