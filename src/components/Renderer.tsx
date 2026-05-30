@@ -149,7 +149,7 @@ export function Renderer({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className={`w-full max-w-4xl px-6 flex flex-col justify-center ${
-              hero.height === 'screen' ? 'min-h-[100svh] py-12' : hero.height === 'large' ? 'min-h-[60svh] py-10' : 'py-8'
+              hero.height === 'screen' ? 'min-h-[50svh] py-12' : hero.height === 'large' ? 'min-h-[30svh] py-10' : 'py-8'
             }`}
             style={{
               alignItems: hero.alignment === 'center' ? 'center' : hero.alignment === 'right' ? 'flex-end' : 'flex-start',
@@ -161,17 +161,17 @@ export function Renderer({
               <img src={hero.logoUrl} alt="Logo" className="mb-6 max-h-24 object-contain shadow-2xl" />
             )}
             
-            {/* ヒーロータイトル (特大文字) */}
+            {/* ヒーロータイトル (モバイルレスポンシブな特大文字：スマホでは上品なtext-3xl、PCで迫力のあるmd:text-5xl/lg:text-6xl) */}
             <h1 
-              className="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-balance drop-shadow-lg"
+              className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 text-balance drop-shadow-lg"
               style={{ fontFamily: 'var(--font-family-heading)' }}
             >
               {hero.title}
             </h1>
             
-            {/* ヒーロー説明文 */}
+            {/* ヒーロー説明文 (モバイルレスポンシブなサイズ：スマホではすっきりしたtext-sm、PCでmd:text-lg/lg:text-xl) */}
             {hero.description && (
-              <p className="text-lg md:text-xl text-[var(--color-text-secondary)] max-w-2xl text-balance drop-shadow-md">
+              <p className="text-sm md:text-lg lg:text-xl text-[var(--color-text-secondary)] max-w-2xl text-balance drop-shadow-md">
                 {hero.description}
               </p>
             )}
@@ -221,8 +221,8 @@ export function Renderer({
                   </svg>
                 </div>
                 
-                {/* サンクスメッセージタイトル */}
-                <h2 className="text-2xl font-bold tracking-wide" style={{ fontFamily: 'var(--font-family-heading)' }}>
+                {/* サンクスメッセージタイトル (モバイルレスポンシブ：スマホではtext-xl、PCでtext-2xl) */}
+                <h2 className="text-xl md:text-2xl font-bold tracking-wide" style={{ fontFamily: 'var(--font-family-heading)' }}>
                   送信が完了しました
                 </h2>
                 
